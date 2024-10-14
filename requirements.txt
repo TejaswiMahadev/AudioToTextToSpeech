@@ -1,5 +1,5 @@
 streamlit==1.24.0
-yt-dlp==0.39.0
+yt-dlp==0.36.0
 deepgram==0.6.0
 elevenlabs==0.1.1
 nest_asyncio==1.5.6
