@@ -7,8 +7,8 @@ import streamlit as st
 from elevenlabs import ElevenLabs, Voice, VoiceSettings
 
 # Deepgram and ElevenLabs API keys
-DEEPGRAM_API_KEY = '8ac6425116a55329e03025d0dcdd9ba65978d522'
-ELEVENLABS_API_KEY = 'sk_8454fed99afd701bb6d871a280aac5150e7cb8d0abd97403'
+DEEPGRAM_API_KEY = 'YOUR_DEEPGRAM_API_KEY'
+ELEVENLABS_API_KEY = 'YOUR_ELEVENLABS_API_KEY'
 
 def download_audio_from_youtube(url):
     unique_filename = f"audio_{uuid.uuid4()}.mp3"
