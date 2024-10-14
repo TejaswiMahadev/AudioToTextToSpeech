@@ -16,9 +16,9 @@ This Streamlit application allows users to transcribe audio from YouTube videos 
 - Python 3.7 or higher
 - YouTube video URL for audio transcription
 - API Key Retrieval
-   1. ##Deepgram API Key
+   1. Deepgram API Key
    
-   2. ##ElevenLabs API Key
+   2. ElevenLabs API Key
 
 
 ## Installation
