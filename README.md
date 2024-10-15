@@ -25,5 +25,5 @@ This Streamlit application allows users to transcribe audio from YouTube videos 
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/AudioToTextToSpeech.git
+   git clone https://github.com/TejaswiMahadev/AudioToTextToSpeech.git
    cd AudioToTextToSpeech
