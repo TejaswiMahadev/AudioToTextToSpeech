@@ -11,18 +11,33 @@ DEEPGRAM_API_KEY = 'YOUR_DEEPGRAM_API_KEY'
 ELEVENLABS_API_KEY = 'YOUR_ELEVENLABS_API_KEY'
 
 def download_audio_from_youtube(url):
+    # First, try to update yt-dlp
+    try:
+        os.system('yt-dlp -U')
+    except:
+        pass
+        
     unique_filename = f"audio_{uuid.uuid4()}.mp3"
     ydl_opts = {
-        'format': 'bestaudio[ext=m4a]/bestaudio/best',
+        'format': 'ba',  # Changed to simpler format selector
         'outtmpl': unique_filename,
         'verbose': True,
-        'postprocessors': [],
-        # Add these options to help bypass restrictions
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+        }],
         'nocheckcertificate': True,
         'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'referer': 'https://www.youtube.com/',
         'geo_bypass': True,
         'geo_bypass_country': 'US',
+        'ignoreerrors': True,
+        'no_warnings': True,
+        'quiet': False,
+        'extract_flat': False,
+        'force_generic_extractor': False,
+        'sleep_interval': 2,  # Add delay between requests
+        'max_sleep_interval': 5,
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -33,11 +48,30 @@ def download_audio_from_youtube(url):
             'Connection': 'keep-alive',
         }
     }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
-    if not os.path.exists(unique_filename):
-        raise FileNotFoundError(f"Downloaded audio file '{unique_filename}' not found.")
-    return unique_filename
+    
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            error_code = ydl.download([url])
+            if error_code != 0:
+                raise Exception("Download failed with error code: " + str(error_code))
+        
+        if not os.path.exists(unique_filename):
+            raise FileNotFoundError(f"Downloaded audio file '{unique_filename}' not found.")
+        return unique_filename
+    except Exception as e:
+        # As a fallback, try with minimal options
+        minimal_opts = {
+            'format': 'ba/b',
+            'outtmpl': unique_filename,
+            'no_warnings': True,
+            'quiet': False
+        }
+        with yt_dlp.YoutubeDL(minimal_opts) as ydl:
+            ydl.download([url])
+        
+        if not os.path.exists(unique_filename):
+            raise FileNotFoundError(f"Downloaded audio file '{unique_filename}' not found.")
+        return unique_filename
 
 async def transcribe_audio_deepgram(audio_file, deepgram_api_key):
     deepgram = Deepgram(deepgram_api_key)
