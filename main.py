@@ -17,7 +17,21 @@ def download_audio_from_youtube(url):
         'outtmpl': unique_filename,
         'verbose': True,
         'postprocessors': [],
-        'cookiefile': 'cookies.txt'  # Add this line
+        # Add these options to help bypass restrictions
+        'nocheckcertificate': True,
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'referer': 'https://www.youtube.com/',
+        'geo_bypass': True,
+        'geo_bypass_country': 'US',
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'en-us,en;q=0.5',
+            'Accept-Encoding': 'gzip,deflate',
+            'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+            'Keep-Alive': '115',
+            'Connection': 'keep-alive',
+        }
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
