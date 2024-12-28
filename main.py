@@ -16,15 +16,13 @@ def download_audio_from_youtube(url):
         'format': 'bestaudio[ext=m4a]/bestaudio/best',
         'outtmpl': unique_filename,
         'verbose': True,
-        'postprocessors': []  # No FFmpeg required
+        'postprocessors': [],
+        'cookiefile': 'cookies.txt'  # Add this line
     }
-
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
-
     if not os.path.exists(unique_filename):
         raise FileNotFoundError(f"Downloaded audio file '{unique_filename}' not found.")
-
     return unique_filename
 
 async def transcribe_audio_deepgram(audio_file, deepgram_api_key):
